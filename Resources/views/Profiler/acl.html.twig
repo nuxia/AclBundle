@@ -1,0 +1,146 @@
+{% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+    {% set icon %}
+        <img width="20" height="28" alt="Lock" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAJiS0dEAP+Hj8y/AAAACXBIWXMAAABIAAAASABGyWs+AAAB1klEQVRIx53VP04bURAG8N/+kY2lUCAkqkTQ5QBJRBPJF+ACtECTIyAouEUauAAHSG+JBiQaOmjT0JgqUjDO7qTwBmx213aYJ632zc58O2++b3Zptkwys09kzYFJS3qho6/vA34aGHiSKSxlGXbcCaWornd2qidLpR9WaaUHD9VdOFwGIsOeMFY4s23Dhm1nCmNhbxFEiveGwthutZ9cd42FoffP3kbLcSyEI3RkEolMB0dCOK6itHMyEO6tzzCUYN29MHjNXDqTHlZt4cZQRyavVqZj6AZbVsU0RP4KINfDEMUM61nl7cmryBpAotTR18OmHe+UM5X+somevh+epiFeTrnmUijEnFUIl9bqGs5xIowq7f1pWBNdjoSTl9r/HSHw8bmpyRy5pFVk1FlILWtpMwt1K5VIF2mvbbRDIkfMMj8b2Y4dEtf27buuk9Y8hefCeIquK13QdTVF71g4f5nKtPX0nBpZsWLktPLM7+fbLJ3jP9D16FHXQXtk3goQvrjwHd98Fv8LMJm4T84aaWwBiBpEqWgUUiyrxHRxk9NX1C1nZb2CBLdURS9Kvq0L/80flGSm6z1frStaex4yQxd+N09HsqQu0+kXJDWIZEH65D/5bH8BalDEMLvUR7oAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDEtMjdUMDc6MTk6MjUtMDU6MDB+pYlCAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE1LTAxLTI3VDA3OjE5OjI1LTA1OjAwD/gx/gAAAABJRU5ErkJggg=="/>
+        <span class="sf-toolbar-status">{{ collector.count }}</span>
+        <span class="sf-toolbar-info-piece-additional-detail">
+            in {{ collector.time }} ms
+        </span>
+    {% endset %}
+
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>Checks</b>
+            <span>{{ collector.checks|length }} ({{ collector.checksTime }} ms)</span>
+        </div>
+
+        <div class="sf-toolbar-info-piece">
+            <b>Managements</b>
+            <span>{{ collector.managements|length }} ({{ collector.managementsTime }} ms)</span>
+        </div>
+
+        <div class="sf-toolbar-info-piece">
+            <b>Filters</b>
+            <span>{{ collector.filters|length }} ({{ collector.filtersTime }} ms)</span>
+        </div>
+
+        <div class="sf-toolbar-info-piece">
+            <b>Total</b>
+            <span>{{ collector.count }} ({{ collector.time }} ms)</span>
+        </div>
+    {% endset %}
+
+    {% include '@WebProfiler/Profiler/toolbar_item.html.twig' with { 'link': profiler_url } %}
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+        <span class="icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAJiS0dEAP+Hj8y/AAAACXBIWXMAAABIAAAASABGyWs+AAAB1klEQVRIx53VP04bURAG8N/+kY2lUCAkqkTQ5QBJRBPJF+ACtECTIyAouEUauAAHSG+JBiQaOmjT0JgqUjDO7qTwBmx213aYJ632zc58O2++b3Zptkwys09kzYFJS3qho6/vA34aGHiSKSxlGXbcCaWornd2qidLpR9WaaUHD9VdOFwGIsOeMFY4s23Dhm1nCmNhbxFEiveGwthutZ9cd42FoffP3kbLcSyEI3RkEolMB0dCOK6itHMyEO6tzzCUYN29MHjNXDqTHlZt4cZQRyavVqZj6AZbVsU0RP4KINfDEMUM61nl7cmryBpAotTR18OmHe+UM5X+somevh+epiFeTrnmUijEnFUIl9bqGs5xIowq7f1pWBNdjoSTl9r/HSHw8bmpyRy5pFVk1FlILWtpMwt1K5VIF2mvbbRDIkfMMj8b2Y4dEtf27buuk9Y8hefCeIquK13QdTVF71g4f5nKtPX0nBpZsWLktPLM7+fbLJ3jP9D16FHXQXtk3goQvrjwHd98Fv8LMJm4T84aaWwBiBpEqWgUUiyrxHRxk9NX1C1nZb2CBLdURS9Kvq0L/80flGSm6z1frStaex4yQxd+N09HsqQu0+kXJDWIZEH65D/5bH8BalDEMLvUR7oAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDEtMjdUMDc6MTk6MjUtMDU6MDB+pYlCAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE1LTAxLTI3VDA3OjE5OjI1LTA1OjAwD/gx/gAAAABJRU5ErkJggg==" alt="Lock"></span>
+        <strong>ACL</strong>
+        <span class="count">
+            <span>{{ collector.count }}</span>
+            <span>{{ collector.time }} ms</span>
+        </span>
+    </span>
+{% endblock %}
+
+{% block panel %}
+    <h2>ACL Checks</h2>
+
+    {% if collector.checks|length > 0 %}
+        <table>
+            <thead>
+            <tr>
+                <th>Method</th>
+                <th>Attributes</th>
+                <th>ObjectIdentity</th>
+                <th>Field</th>
+                <th>SecurityIdentity</th>
+                <th>Result</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for check in collector.checks %}
+                <tr>
+                    <td>{{ check.method }}</td>
+                    <td>{{ check.attributes|join(', ') }}</td>
+                    <td>{{ check.oid.type }}<br>{{ check.oid.identifier }}</td>
+                    <td>{{ check.field ? check.field : '' }}</td>
+                    <td>
+                        {% if check.sid.username is defined %}
+                            {{ check.sid.class }}-{{ check.sid.username }}
+                        {% else %}
+                            {{ check.sid.role }}
+                        {% endif %}
+                    </td>
+                    <td>{{ check.result ? 'TRUE' : 'FALSE' }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No check was done during this request</p>
+    {% endif %}
+
+    <h2>ACL Managements</h2>
+
+    {% if collector.managements|length > 0 %}
+        <table>
+            <thead>
+            <tr>
+                <th>Method</th>
+                <th>Permissions</th>
+                <th>ObjectIdentity</th>
+                <th>Field</th>
+                <th>SecurityIdentity</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for management in collector.managements %}
+                <tr>
+                    <td>{{ management.method }}</td>
+                    <td>{{ management.permissions|join(', ') }}</td>
+                    <td>{{ management.oid.type }}<br>{{ management.oid.identifier }}</td>
+                    <td>{{ management.field ? management.field : '' }}</td>
+                    <td>
+                        {% if management.sid.username is defined %}
+                            {{ management.sid.class }}-{{ management.sid.management }}
+                        {% else %}
+                            {{ management.sid.role }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No management was done during this request</p>
+    {% endif %}
+
+    <h2>ACL Filters</h2>
+
+    {% if collector.filters|length > 0 %}
+        <table>
+            <thead>
+            <tr>
+                <th>Method</th>
+                <th>Query</th>
+                <th>Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for filter in collector.filters %}
+                <tr>
+                    <td>{{ filter.method }}</td>
+                    <td>{{ filter.query }}</td>
+                    <td>{{ filter.time|round(2) }} ms</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No filter done was during this request</p>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,33 @@
+services:
+    nuxia_acl.acl_checker.collector:
+        class: Nuxia\AclBundle\DataCollector\Collector\AclCheckerCollector
+        public: false
+        decorates: nuxia_acl.acl_checker
+        arguments:
+            - @nuxia_acl.acl_checker.collector.inner
+            - @debug.stopwatch
+
+    nuxia_acl.acl_manager.collector:
+        class: Nuxia\AclBundle\DataCollector\Collector\AclManagerCollector
+        public: false
+        decorates: nuxia_acl.acl_manager
+        arguments:
+            - @nuxia_acl.acl_manager.collector.inner
+            - @debug.stopwatch
+
+    nuxia_acl.acl_filter.collector:
+        class: Nuxia\AclBundle\DataCollector\Collector\AclFilterCollector
+        public: false
+        decorates: nuxia_acl.acl_filter
+        arguments:
+            - @nuxia_acl.acl_filter.collector.inner
+            - @debug.stopwatch
+
+    nuxia_acl.acl_data_collector:
+        class: Nuxia\AclBundle\DataCollector\AclDataCollector
+        arguments:
+            - @nuxia_acl.acl_checker.collector
+            - @nuxia_acl.acl_manager.collector
+            - @nuxia_acl.acl_filter.collector
+        tags:
+            - { name: data_collector, template: "NuxiaAclBundle:Profiler:acl", id: acl }

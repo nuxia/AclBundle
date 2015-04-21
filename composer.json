@@ -1,0 +1,37 @@
+{
+    "name": "nuxia/acl-bundle",
+    "description": "Acl Bundle",
+    "keywords": ["Acl"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexandre Dupuy",
+            "email": "alex.dpy@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "symfony/framework-bundle": "~2.3",
+        "symfony/security-bundle": "~2.3"
+    },
+    "require-dev": {
+        "doctrine/orm": "~2.4",
+        "doctrine/doctrine-bundle": "1.*",
+        "symfony/finder": "~2.3",
+        "phpunit/phpunit": "~4.0",
+        "symfony/browser-kit": "~2.3",
+        "symfony/twig-bridge": "~2.3"
+    },
+    "autoload": {
+        "psr-4": { "Nuxia\\AclBundle\\": "" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Nuxia\\AclBundle\\Tests\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
