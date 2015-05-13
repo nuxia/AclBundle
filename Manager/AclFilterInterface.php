@@ -18,6 +18,7 @@ interface AclFilterInterface
      * @param string[]                                  $orX
      *
      * @return DBALQueryBuilder|ORMQuery
+     *
      * @throws \InvalidArgumentException
      */
     public function apply(

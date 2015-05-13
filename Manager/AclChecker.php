@@ -18,14 +18,14 @@ class AclChecker implements AclCheckerInterface
      * @var AclIdentifierInterface
      */
     protected $aclIdentifier;
-    
+
     /**
-     * @var SecurityContextInterface $authorizationChecker
+     * @var SecurityContextInterface
      */
     protected $authorizationChecker;
 
     /**
-     * @var AccessDecisionManagerInterface $accessDecisionManager
+     * @var AccessDecisionManagerInterface
      */
     protected $accessDecisionManager;
 

@@ -27,7 +27,7 @@ class AclFilterTest extends AbstractSecurityTest
         $posts->setPrimaryKey(['id']);
         $posts->addColumn('status', Type::STRING);
 
-        $this->connection->exec("DROP TABLE IF EXISTS posts");
+        $this->connection->exec('DROP TABLE IF EXISTS posts');
         foreach ($schema->toSql($this->connection->getDatabasePlatform()) as $sql) {
             $this->connection->exec($sql);
         }
@@ -37,7 +37,7 @@ class AclFilterTest extends AbstractSecurityTest
             $this->posts[$i] = new PostObject($i);
             $this->connection->insert('posts', [
                 'id' => $this->posts[$i]->getId(),
-                'status' => $this->posts[$i]->getStatus()
+                'status' => $this->posts[$i]->getStatus(),
             ]);
             $i++;
         }
@@ -46,9 +46,8 @@ class AclFilterTest extends AbstractSecurityTest
     protected function tearDown()
     {
         parent::tearDown();
-        $this->connection->exec("DROP TABLE IF EXISTS posts");
+        $this->connection->exec('DROP TABLE IF EXISTS posts');
     }
-
 
     public function testFilter()
     {
@@ -191,7 +190,6 @@ class AclFilterTest extends AbstractSecurityTest
             $fails[] = $e;
         }
 
-
         $query = $this->aclFilter->apply($cloneORMQueryBuilder->getQuery(), $permission, 'Nuxia\AclBundle\Tests\Model\PostObject', 'p.id', $user, $orX);
         try {
             $this->assertEquals(
@@ -207,7 +205,7 @@ class AclFilterTest extends AbstractSecurityTest
             $messages = [];
             /** @var \PHPUnit_Framework_ExpectationFailedException $e */
             foreach ($fails as $e) {
-                $messages[] = $e->getMessage() . $e->getComparisonFailure()->getDiff();
+                $messages[] = $e->getMessage().$e->getComparisonFailure()->getDiff();
             }
 
             $this->fail(implode(PHP_EOL, $messages));
@@ -216,6 +214,7 @@ class AclFilterTest extends AbstractSecurityTest
 
     /**
      * @param DBALQueryBuilder|Query $queryBuilder
+     *
      * @return int[]
      */
     private function getPostIds($queryBuilder)

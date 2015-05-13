@@ -19,7 +19,8 @@ interface AclIdentifierInterface
      * @param string|object|ObjectIdentityInterface $classOrObject
      *
      * @return ObjectIdentityInterface
-     * @throws OidTypeException            When the $type is not supported
+     *
+     * @throws OidTypeException When the $type is not supported
      */
     public function getObjectIdentity($type, $classOrObject);
 

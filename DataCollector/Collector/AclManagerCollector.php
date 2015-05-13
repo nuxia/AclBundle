@@ -84,7 +84,7 @@ class AclManagerCollector implements AclManagerInterface
             'oid' => $oid,
             'sid' => $sid,
             'field' => $field,
-            'time' => end($periods)->getDuration()
+            'time' => end($periods)->getDuration(),
         ];
 
         return $result;
@@ -173,6 +173,7 @@ class AclManagerCollector implements AclManagerInterface
     /**
      * @param $method
      * @param $arguments
+     *
      * @return mixed
      */
     public function __call($method, $arguments)

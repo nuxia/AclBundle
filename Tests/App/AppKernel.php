@@ -11,14 +11,14 @@ class AppKernel extends Kernel
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Nuxia\AclBundle\NuxiaAclBundle()
+            new Nuxia\AclBundle\NuxiaAclBundle(),
         );
+
         return $bundles;
     }
 
-
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__ . '/config/config.yml');
+        $loader->load(__DIR__.'/config/config.yml');
     }
 }

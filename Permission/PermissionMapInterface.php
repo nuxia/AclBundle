@@ -7,7 +7,7 @@ use Symfony\Component\Security\Acl\Permission\PermissionMapInterface as SymfonyP
 interface PermissionMapInterface extends SymfonyPermissionMap
 {
     /**
-     * Returns a new instance of the MaskBuilder used in the permissionMap
+     * Returns a new instance of the MaskBuilder used in the permissionMap.
      *
      * @return MaskBuilderInterface
      */

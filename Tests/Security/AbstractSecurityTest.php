@@ -77,7 +77,7 @@ class AbstractSecurityTest extends WebTestCase
 
         $this->connection = $this->container->get('database_connection');
 
-        $config = Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../Model'], true);
+        $config = Setup::createAnnotationMetadataConfiguration([__DIR__.'/../Model'], true);
         $this->em = EntityManager::create($this->connection, $config);
 
         $this->tableNames = array(
@@ -122,8 +122,8 @@ class AbstractSecurityTest extends WebTestCase
     }
 
     /**
-     * @param string      $username
-     * @param array $roles
+     * @param string $username
+     * @param array  $roles
      *
      * @return User
      */

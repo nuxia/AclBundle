@@ -14,5 +14,4 @@ class OidTypeException extends \InvalidArgumentException
             $type
         ));
     }
-
 }

@@ -93,7 +93,7 @@ class AclCheckerCollector implements AclCheckerInterface
             'oid' => $isFieldVote ? $oid->getDomainObject() : $oid,
             'sid' => $sid,
             'field' => $isFieldVote ? $oid->getField() : null,
-            'time' => end($periods)->getDuration()
+            'time' => end($periods)->getDuration(),
         ];
 
         return $result;
@@ -150,6 +150,7 @@ class AclCheckerCollector implements AclCheckerInterface
     /**
      * @param $method
      * @param $arguments
+     *
      * @return mixed
      */
     public function __call($method, $arguments)

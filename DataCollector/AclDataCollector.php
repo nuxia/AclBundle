@@ -47,7 +47,6 @@ class AclDataCollector extends DataCollector implements LateDataCollectorInterfa
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-
     }
 
     /**
@@ -160,5 +159,4 @@ class AclDataCollector extends DataCollector implements LateDataCollectorInterfa
     {
         return 'acl';
     }
-
 }

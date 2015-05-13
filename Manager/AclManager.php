@@ -22,7 +22,7 @@ class AclManager implements AclManagerInterface
     protected $aclIdentifier;
 
     /**
-     * @var MutableAclProviderInterface $aclProvider
+     * @var MutableAclProviderInterface
      */
     protected $aclProvider;
 
@@ -151,7 +151,7 @@ class AclManager implements AclManagerInterface
      */
     public function revokeUserOnObject($permissions, $object, UserInterface $user = null, $field = null)
     {
-         $this->revoke(
+        $this->revoke(
              $this->aclIdentifier->getObjectIdentity(AclIdentifierInterface::OID_TYPE_OBJECT, $object),
              $this->aclIdentifier->getUserSecurityIdentity($user),
              $permissions,
@@ -275,7 +275,7 @@ class AclManager implements AclManagerInterface
      */
     protected function resolveAceMethod($method, $type, $field = null)
     {
-        $result = $method . ucfirst($type);
+        $result = $method.ucfirst($type);
 
         if (null !== $field) {
             $result .= 'Field';
@@ -314,7 +314,7 @@ class AclManager implements AclManagerInterface
         try {
             return $this->aclProvider->findAcl($objectIdentity);
         } catch (AclNotFoundException $e) {
-            return null;
+            return;
         }
     }
 }

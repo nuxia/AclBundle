@@ -65,7 +65,6 @@ class AclFilter implements AclFilterInterface
         $this->aclTables = $aclTables;
     }
 
-
     /**
      * @param SymfonyPermissionMapInterface $permissionMap
      */
@@ -105,11 +104,11 @@ class AclFilter implements AclFilterInterface
 
             $queryBuilder->add('join', [
                 $fromAlias => [
-                    'joinType'      => empty($orX) ? 'inner' : 'left',
-                    'joinTable'     => '(' . $this->getAclJoin($connection, $oidClass, $user) . ')',
-                    'joinAlias'     => 'acl',
-                    'joinCondition' => $oidReference . ' = acl.object_identifier'
-                ]
+                    'joinType' => empty($orX) ? 'inner' : 'left',
+                    'joinTable' => '('.$this->getAclJoin($connection, $oidClass, $user).')',
+                    'joinAlias' => 'acl',
+                    'joinCondition' => $oidReference.' = acl.object_identifier',
+                ],
             ], true);
 
             $orX[] = $this->getAclWhereClause($connection, $permission);
@@ -155,7 +154,7 @@ class AclFilter implements AclFilterInterface
             ->select('acl_o.object_identifier', 'acl_e.granting', 'acl_e.granting_strategy', 'acl_e.mask')
             ->from($this->aclTables['entry'], 'acl_e')
             ->innerJoin('acl_e', $this->aclTables['oid'], 'acl_o', 'acl_e.object_identity_id = acl_o.id')
-            ->where('acl_e.class_id = ' . $this->findClassId($connection, $oidClass))
+            ->where('acl_e.class_id = '.$this->findClassId($connection, $oidClass))
             ->andWhere(
                 empty($sidIds) ? '1 = 2' : $queryBuilder->expr()->in('acl_e.security_identity_id', $sidIds)
             );
@@ -168,6 +167,7 @@ class AclFilter implements AclFilterInterface
      * @param $permission
      *
      * @return string
+     *
      * @throws \Exception
      */
     private function getAclWhereClause(Connection $connection, $permission)
@@ -195,7 +195,7 @@ class AclFilter implements AclFilterInterface
 SQL;
         }
 
-        return $sql . implode(' OR ', $conditions) . ')';
+        return $sql.implode(' OR ', $conditions).')';
     }
 
     /**
@@ -207,13 +207,13 @@ SQL;
     private function findClassId(Connection $connection, $oidClass)
     {
         return (int) $connection->fetchColumn(
-            'SELECT acl_c.id FROM ' . $this->aclTables['class'] . ' acl_c WHERE acl_c.class_type = :oid_class',
+            'SELECT acl_c.id FROM '.$this->aclTables['class'].' acl_c WHERE acl_c.class_type = :oid_class',
             ['oid_class' => $oidClass]
         );
     }
 
     /**
-     * @param Connection $connection
+     * @param Connection    $connection
      * @param UserInterface $user
      *
      * @return int[]
@@ -227,7 +227,7 @@ SQL;
             ->select('acl_s.id')
             ->from($this->aclTables['sid'], 'acl_s')
             ->where('acl_s.username = 1 AND acl_s.identifier = :identifier')
-            ->setParameter('identifier', $userSid->getClass() . '-' . $userSid->getUsername());
+            ->setParameter('identifier', $userSid->getClass().'-'.$userSid->getUsername());
 
         if (null === $user && null !== $this->tokenStorage->getToken()) {
             $user = $this->tokenStorage->getToken()->getUser();
