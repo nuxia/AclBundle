@@ -18,9 +18,9 @@ interface AclCheckerInterface
     public function isGrantedOnClass($attributes, $class, $field = null);
 
     /**
-     * @param mixed        $attributes
-     * @param object       $object
-     * @param null|string  $field
+     * @param mixed       $attributes
+     * @param object      $object
+     * @param null|string $field
      *
      * @return bool
      */

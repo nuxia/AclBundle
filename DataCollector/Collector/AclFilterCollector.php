@@ -51,7 +51,7 @@ class AclFilterCollector implements AclFilterInterface
         $this->filters[] = [
             'method' => $function,
             'query' => $result->getSQL(),
-            'time' => end($periods)->getDuration()
+            'time' => end($periods)->getDuration(),
         ];
 
         return $result;
@@ -74,6 +74,7 @@ class AclFilterCollector implements AclFilterInterface
     /**
      * @param $method
      * @param $arguments
+     *
      * @return mixed
      */
     public function __call($method, $arguments)

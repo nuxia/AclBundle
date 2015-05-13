@@ -10,11 +10,12 @@ class AclWalker extends SqlWalker
 {
     /**
      * @param \Doctrine\ORM\Query\AST\FromClause $fromClause
+     *
      * @return string
      */
     public function walkFromClause($fromClause)
     {
-        $sql = parent::walkFromClause($fromClause) . ' ';
+        $sql = parent::walkFromClause($fromClause).' ';
 
         $aclJoin = $this->getQuery()->getHint('acl_join');
         $oidReference = $this->getQuery()->getHint('acl_filter_oid_reference');
@@ -22,7 +23,6 @@ class AclWalker extends SqlWalker
 
         $joinType = empty($orX) ? 'INNER' : 'LEFT';
         $newOidReference = $this->DQLToSQLReference($oidReference);
-
 
         $sql .= <<<SQL
 {$joinType} JOIN ($aclJoin) acl ON {$newOidReference} = acl.object_identifier
@@ -33,11 +33,12 @@ SQL;
 
     /**
      * @param \Doctrine\ORM\Query\AST\WhereClause $whereClause
+     *
      * @return string
      */
     public function walkWhereClause($whereClause)
     {
-        $sql =  parent::walkWhereClause($whereClause);
+        $sql = parent::walkWhereClause($whereClause);
 
         $aclWhereClause = $this->getQuery()->getHint('acl_where_clause');
         $orX = $this->getQuery()->getHint('acl_filter_or_x');
@@ -53,10 +54,10 @@ SQL;
                 }
             }
 
-            $sql .= '(' . new Orx($orX) . ') OR ';
+            $sql .= '('.new Orx($orX).') OR ';
         }
 
-        $sql .= '(' . $aclWhereClause . '))';
+        $sql .= '('.$aclWhereClause.'))';
 
         return $sql;
     }
@@ -75,6 +76,6 @@ SQL;
         $aliasReference = $this->getSQLTableAlias($tableReference, $explode[0]);
         $columnName = $metadata->fieldMappings[$explode[1]]['columnName'];
 
-        return $aliasReference . '.' . $columnName;
+        return $aliasReference.'.'.$columnName;
     }
 }

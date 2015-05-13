@@ -5,18 +5,7 @@ namespace Nuxia\AclBundle\AclManager\Tests\Manager;
 use Nuxia\AclBundle\Tests\Model\BarObject;
 use Nuxia\AclBundle\Tests\Model\FooObject;
 use Nuxia\AclBundle\Tests\Security\AbstractSecurityTest;
-use Symfony\Component\Security\Acl\Dbal\AclProvider;
-use Symfony\Component\Security\Acl\Dbal\MutableAclProvider;
-use Symfony\Component\Security\Acl\Domain\Entry;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Exception\ConcurrentModificationException;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Symfony\Component\Security\Acl\Permission\PermissionMapInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
-use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class AclManagerTest extends AbstractSecurityTest
 {

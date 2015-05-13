@@ -104,7 +104,7 @@ class AclIdentifierTest extends AbstractSecurityTest
     }
 
     /**
-     * @param User $user
+     * @param User   $user
      * @param string $newUsername
      */
     private function changeUsername(User $user, $newUsername)
