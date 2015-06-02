@@ -83,3 +83,22 @@ $query = $aclFilter->apply($queryBuilder, 'VIEW', 'Post', 'p.id');
 $posts = $query->getResult();
 // The current user will only see the posts he is granted on with the VIEW permission
 ```
+
+It's possible de add some extra conditions with the 6th argument.
+```php
+$query = $aclFilter->apply($queryBuilder, 'VIEW', 'Post', 'p.id', null, ["p.status = 'inactive'");
+```
+It means that the current user will see the posts he is granted on with the VIEW permission or the inactive posts, even if he is not granted on
+
+## AclDataCollector
+
+With Symfony >= 2.5, the AclDataCollector can be enabled.
+
+```yml
+# app/config/config_dev.yml
+nuxia_acl:
+    data_collector: true #default configuration is false
+```
+The Symfony debug toolbar will have a new 'ACL' section, with some information about what happened with ACL.
+
+
