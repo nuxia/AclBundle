@@ -10,6 +10,7 @@ use Doctrine\ORM\Query as ORMQuery;
 use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 use Symfony\Component\Security\Acl\Domain\PermissionGrantingStrategy;
 use Symfony\Component\Security\Acl\Permission\PermissionMapInterface as SymfonyPermissionMapInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
@@ -29,7 +30,7 @@ class AclFilter implements AclFilterInterface
     protected $roleHierarchy;
 
     /**
-     * @var SecurityContextInterface
+     * @var TokenStorageInterface|SecurityContextInterface
      */
     protected $tokenStorage;
 
@@ -48,17 +49,21 @@ class AclFilter implements AclFilterInterface
     protected $aclWalker;
 
     /**
-     * @param AclIdentifierInterface   $aclIdentifier
-     * @param RoleHierarchyInterface   $roleHierarchy
-     * @param SecurityContextInterface $tokenStorage
-     * @param array                    $aclTables
+     * @param AclIdentifierInterface                         $aclIdentifier
+     * @param RoleHierarchyInterface                         $roleHierarchy
+     * @param TokenStorageInterface|SecurityContextInterface $tokenStorage
+     * @param array                                          $aclTables
      */
     public function __construct(
         AclIdentifierInterface $aclIdentifier,
         RoleHierarchyInterface $roleHierarchy,
-        SecurityContextInterface $tokenStorage,
+        $tokenStorage,
         array $aclTables
     ) {
+        if (!$tokenStorage instanceof TokenStorageInterface && !$tokenStorage instanceof SecurityContextInterface) {
+            throw new \InvalidArgumentException('Argument 3 should be an instance of Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface or Symfony\Component\Security\Core\SecurityContextInterface');
+        }
+
         $this->aclIdentifier = $aclIdentifier;
         $this->roleHierarchy = $roleHierarchy;
         $this->tokenStorage = $tokenStorage;

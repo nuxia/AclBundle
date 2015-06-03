@@ -10,7 +10,7 @@ services:
     nuxia_acl.acl_identifier:
         class: Nuxia\AclBundle\Manager\AclIdentifier
         arguments:
-            - @security.context
+            -
             - @security.acl.provider
             - @security.acl.dbal.connection
             - %acl_tables%
@@ -27,7 +27,7 @@ services:
         class: Nuxia\AclBundle\Manager\AclChecker
         arguments:
             - @nuxia_acl.acl_identifier
-            - @security.context
+            -
             - @security.access.decision_manager
 
     nuxia_acl.acl_filter:
@@ -35,7 +35,7 @@ services:
         arguments:
             - @nuxia_acl.acl_identifier
             - @security.role_hierarchy
-            - @security.context
+            -
             - %acl_tables%
         calls:
             - [ setPermissionMap, [ @nuxia_acl.permission_map ] ]

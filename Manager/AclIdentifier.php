@@ -9,6 +9,7 @@ use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Util\ClassUtils;
@@ -16,7 +17,7 @@ use Symfony\Component\Security\Core\Util\ClassUtils;
 class AclIdentifier implements AclIdentifierInterface
 {
     /**
-     * @var SecurityContextInterface
+     * @var TokenStorageInterface|SecurityContextInterface
      */
     protected $tokenStorage;
 
@@ -36,17 +37,21 @@ class AclIdentifier implements AclIdentifierInterface
     protected $aclTables;
 
     /**
-     * @param SecurityContextInterface $tokenStorage
-     * @param MutableAclProvider       $aclProvider
-     * @param Connection               $connection
-     * @param string[]                 $aclTables
+     * @param TokenStorageInterface|SecurityContextInterface $tokenStorage
+     * @param MutableAclProvider                             $aclProvider
+     * @param Connection                                     $connection
+     * @param string[]                                       $aclTables
      */
     public function __construct(
-        SecurityContextInterface $tokenStorage,
+        $tokenStorage,
         MutableAclProvider $aclProvider,
         Connection $connection,
         array $aclTables
     ) {
+        if (!$tokenStorage instanceof TokenStorageInterface && !$tokenStorage instanceof SecurityContextInterface) {
+            throw new \InvalidArgumentException('Argument 1 should be an instance of Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface or Symfony\Component\Security\Core\SecurityContextInterface');
+        }
+
         $this->tokenStorage = $tokenStorage;
         $this->aclProvider = $aclProvider;
         $this->connection = $connection;
