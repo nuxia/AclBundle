@@ -7,6 +7,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\Kernel;
 
 class NuxiaAclExtension extends Extension
 {
@@ -32,7 +33,7 @@ class NuxiaAclExtension extends Extension
         }
 
         // Set the SecurityContext for Symfony <2.6
-        if (interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
+        if (Kernel::VERSION_ID >= 20600) {
             $tokenStorageReference = new Reference('security.token_storage');
             $authorizationCheckerReference = new Reference('security.authorization_checker');
         } else {
