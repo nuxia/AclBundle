@@ -4,8 +4,10 @@ namespace Nuxia\AclBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\Kernel;
 
 class NuxiaAclExtension extends Extension
 {
@@ -29,5 +31,25 @@ class NuxiaAclExtension extends Extension
         )) {
             $loader->load('collectors.yml');
         }
+
+        // Set the SecurityContext for Symfony <2.6
+        if (Kernel::VERSION_ID >= 20600) {
+            $tokenStorageReference = new Reference('security.token_storage');
+            $authorizationCheckerReference = new Reference('security.authorization_checker');
+        } else {
+            $tokenStorageReference = new Reference('security.context');
+            $authorizationCheckerReference = new Reference('security.context');
+        }
+        $container
+            ->getDefinition('nuxia_acl.acl_identifier')
+            ->replaceArgument(0, $tokenStorageReference);
+
+        $container
+            ->getDefinition('nuxia_acl.acl_checker')
+            ->replaceArgument(1, $authorizationCheckerReference);
+
+        $container
+            ->getDefinition('nuxia_acl.acl_filter')
+            ->replaceArgument(2, $tokenStorageReference);
     }
 }

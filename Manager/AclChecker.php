@@ -8,6 +8,7 @@ use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,7 +21,7 @@ class AclChecker implements AclCheckerInterface
     protected $aclIdentifier;
 
     /**
-     * @var SecurityContextInterface
+     * @var AuthorizationCheckerInterface|SecurityContextInterface
      */
     protected $authorizationChecker;
 
@@ -31,14 +32,18 @@ class AclChecker implements AclCheckerInterface
 
     /**
      * @param AclIdentifierInterface         $aclIdentifier
-     * @param SecurityContextInterface       $authorizationChecker
+     * @param AuthorizationCheckerInterface|SecurityContextInterface       $authorizationChecker
      * @param AccessDecisionManagerInterface $accessDecisionManager
      */
     public function __construct(
         AclIdentifierInterface $aclIdentifier,
-        SecurityContextInterface $authorizationChecker,
+        $authorizationChecker,
         AccessDecisionManagerInterface $accessDecisionManager
     ) {
+        if (!$authorizationChecker instanceof AuthorizationCheckerInterface && !$authorizationChecker instanceof SecurityContextInterface) {
+            throw new \InvalidArgumentException('Argument 2 should be an instance of Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface or Symfony\Component\Security\Core\SecurityContextInterface');
+        }
+
         $this->aclIdentifier = $aclIdentifier;
         $this->authorizationChecker = $authorizationChecker;
         $this->accessDecisionManager = $accessDecisionManager;
