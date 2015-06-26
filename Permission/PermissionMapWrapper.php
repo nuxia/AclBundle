@@ -2,6 +2,7 @@
 
 namespace Nuxia\AclBundle\Permission;
 
+use Symfony\Component\Security\Acl\Permission\MaskBuilderRetrievalInterface;
 use Symfony\Component\Security\Acl\Permission\PermissionMapInterface as SymfonyPermissionMapInterface;
 
 class PermissionMapWrapper implements PermissionMapInterface
@@ -12,11 +13,19 @@ class PermissionMapWrapper implements PermissionMapInterface
     protected $permissionMap;
 
     /**
+     * @var string
+     */
+    protected $maskBuilderClass;
+
+    /**
      * @param SymfonyPermissionMapInterface $permissionMap
      */
     public function __construct(SymfonyPermissionMapInterface $permissionMap)
     {
         $this->permissionMap = $permissionMap;
+        $this->maskBuilderClass = $permissionMap instanceof MaskBuilderRetrievalInterface
+            ? get_class($permissionMap->getMaskBuilder())
+            : 'Nuxia\AclBundle\Permission\BasicMaskBuilder';
     }
 
     /**
@@ -40,6 +49,6 @@ class PermissionMapWrapper implements PermissionMapInterface
      */
     public function getMaskBuilder()
     {
-        return new BasicMaskBuilder();
+        return new $this->maskBuilderClass();
     }
 }
