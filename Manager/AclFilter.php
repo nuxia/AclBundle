@@ -138,7 +138,7 @@ class AclFilter implements AclFilterInterface
 
         throw new \InvalidArgumentException(sprintf('AclFilter only supports %s, %s or %s.',
             'Doctrine\DBAL\Query\QueryBuilder',
-            'Doctrine\ORM\QueryBuilder',
+            'Doctrine\ORM\Query',
             'Doctrine\ORM\QueryBuilder'
         ));
     }
