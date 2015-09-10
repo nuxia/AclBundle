@@ -126,6 +126,7 @@ class AclFilter implements AclFilterInterface
         if ($queryBuilder instanceof ORMQueryBuilder || $queryBuilder instanceof ORMQuery) {
             $connection = $queryBuilder->getEntityManager()->getConnection();
 
+            /** @var \Doctrine\ORM\Query $query */
             $query = $queryBuilder instanceof ORMQueryBuilder ? $queryBuilder->getQuery() : $queryBuilder;
             $query->setHint('acl_join', $this->getAclJoin($connection, $oidClass, $user));
             $query->setHint('acl_where_clause', $this->getAclWhereClause($connection, $permission));
@@ -177,7 +178,7 @@ class AclFilter implements AclFilterInterface
      */
     private function getAclWhereClause(Connection $connection, $permission)
     {
-        $sql = 'acl.granting = true AND (';
+        $sql = 'acl.granting = 1 AND (';
 
         $requiredMasks = $this->permissionMap->getMasks($permission, null);
 
@@ -231,8 +232,9 @@ SQL;
         $queryBuilder
             ->select('acl_s.id')
             ->from($this->aclTables['sid'], 'acl_s')
-            ->where('acl_s.username = true AND acl_s.identifier = :identifier')
-            ->setParameter('identifier', $userSid->getClass().'-'.$userSid->getUsername());
+            ->where('acl_s.username = :acl_s_username AND acl_s.identifier = :identifier')
+            ->setParameter('identifier', $userSid->getClass().'-'.$userSid->getUsername())
+            ->setParameter('acl_s_username', true, \PDO::PARAM_BOOL);
 
         if (null === $user && null !== $this->tokenStorage->getToken()) {
             $user = $this->tokenStorage->getToken()->getUser();
@@ -253,8 +255,9 @@ SQL;
 
             if (!empty($roles)) {
                 $queryBuilder
-                    ->orWhere('acl_s.username = false AND acl_s.identifier IN (:roles)')
-                    ->setParameter('roles', $roles, Connection::PARAM_STR_ARRAY);
+                    ->orWhere('acl_s.username = :acl_s_username_roles AND acl_s.identifier IN (:roles)')
+                    ->setParameter('roles', $roles, Connection::PARAM_STR_ARRAY)
+                    ->setParameter('acl_s_username_roles', false, \PDO::PARAM_BOOL);
             }
         }
 
