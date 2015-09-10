@@ -25,7 +25,7 @@ class AclWalker extends SqlWalker
         $newOidReference = $this->DQLToSQLReference($oidReference);
 
         $sql .= <<<SQL
-{$joinType} JOIN ($aclJoin) acl ON {$newOidReference} = acl.object_identifier
+{$joinType} JOIN ($aclJoin) acl ON {$newOidReference} = CAST(acl.object_identifier AS INTEGER)
 SQL;
 
         return $sql;

@@ -112,7 +112,7 @@ class AclFilter implements AclFilterInterface
                     'joinType' => empty($orX) ? 'inner' : 'left',
                     'joinTable' => '('.$this->getAclJoin($connection, $oidClass, $user).')',
                     'joinAlias' => 'acl',
-                    'joinCondition' => $oidReference.' = acl.object_identifier',
+                    'joinCondition' => $oidReference.' = CAST(acl.object_identifier AS INTEGER)',
                 ],
             ], true);
 
@@ -177,7 +177,7 @@ class AclFilter implements AclFilterInterface
      */
     private function getAclWhereClause(Connection $connection, $permission)
     {
-        $sql = 'acl.granting = 1 AND (';
+        $sql = 'acl.granting = true AND (';
 
         $requiredMasks = $this->permissionMap->getMasks($permission, null);
 
@@ -231,7 +231,7 @@ SQL;
         $queryBuilder
             ->select('acl_s.id')
             ->from($this->aclTables['sid'], 'acl_s')
-            ->where('acl_s.username = 1 AND acl_s.identifier = :identifier')
+            ->where('acl_s.username = true AND acl_s.identifier = :identifier')
             ->setParameter('identifier', $userSid->getClass().'-'.$userSid->getUsername());
 
         if (null === $user && null !== $this->tokenStorage->getToken()) {
@@ -253,7 +253,7 @@ SQL;
 
             if (!empty($roles)) {
                 $queryBuilder
-                    ->orWhere('acl_s.username = 0 AND acl_s.identifier IN (:roles)')
+                    ->orWhere('acl_s.username = false AND acl_s.identifier IN (:roles)')
                     ->setParameter('roles', $roles, Connection::PARAM_STR_ARRAY);
             }
         }
