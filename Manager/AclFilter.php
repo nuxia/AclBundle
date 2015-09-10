@@ -112,7 +112,7 @@ class AclFilter implements AclFilterInterface
                     'joinType' => empty($orX) ? 'inner' : 'left',
                     'joinTable' => '('.$this->getAclJoin($connection, $oidClass, $user).')',
                     'joinAlias' => 'acl',
-                    'joinCondition' => $oidReference.' = acl.object_identifier',
+                    'joinCondition' => 'CAST('.$oidReference.' AS CHAR(100)) = '.$this->getAclObjectIdentifierComparison($connection),
                 ],
             ], true);
 
@@ -130,6 +130,7 @@ class AclFilter implements AclFilterInterface
             $query->setHint('acl_join', $this->getAclJoin($connection, $oidClass, $user));
             $query->setHint('acl_where_clause', $this->getAclWhereClause($connection, $permission));
             $query->setHint('acl_filter_oid_reference', $oidReference);
+            $query->setHint('acl_object_identifier_comparison', $this->getAclObjectIdentifierComparison($connection));
             $query->setHint('acl_filter_or_x', $orX);
             $query->setHint(ORMQuery::HINT_CUSTOM_OUTPUT_WALKER, $this->aclWalker);
 
@@ -177,7 +178,7 @@ class AclFilter implements AclFilterInterface
      */
     private function getAclWhereClause(Connection $connection, $permission)
     {
-        $sql = 'acl.granting = 1 AND (';
+        $sql = 'acl.granting = '.$connection->getDriver()->getDatabasePlatform()->convertBooleans(true).' AND (';
 
         $requiredMasks = $this->permissionMap->getMasks($permission, null);
 
@@ -231,8 +232,9 @@ SQL;
         $queryBuilder
             ->select('acl_s.id')
             ->from($this->aclTables['sid'], 'acl_s')
-            ->where('acl_s.username = 1 AND acl_s.identifier = :identifier')
-            ->setParameter('identifier', $userSid->getClass().'-'.$userSid->getUsername());
+            ->where('acl_s.username = :username_true AND acl_s.identifier = :identifier')
+            ->setParameter('identifier', $userSid->getClass().'-'.$userSid->getUsername())
+            ->setParameter('username_true', true, \PDO::PARAM_BOOL);
 
         if (null === $user && null !== $this->tokenStorage->getToken()) {
             $user = $this->tokenStorage->getToken()->getUser();
@@ -253,13 +255,28 @@ SQL;
 
             if (!empty($roles)) {
                 $queryBuilder
-                    ->orWhere('acl_s.username = 0 AND acl_s.identifier IN (:roles)')
-                    ->setParameter('roles', $roles, Connection::PARAM_STR_ARRAY);
+                    ->orWhere('acl_s.username = :username_false AND acl_s.identifier IN (:roles)')
+                    ->setParameter('roles', $roles, Connection::PARAM_STR_ARRAY)
+                    ->setParameter('username_false', false, \PDO::PARAM_BOOL);
             }
         }
 
         return array_map(function (array $row) {
             return (int) $row['id'];
         }, $queryBuilder->execute()->fetchAll());
+    }
+
+    /**
+     * @param Connection $connection
+     *
+     * @return string
+     */
+    private function getAclObjectIdentifierComparison(Connection $connection)
+    {
+        if ('pdo_mysql' === $connection->getDriver()->getName()) {
+            return 'CONVERT(acl.object_identifier USING utf8)';
+        }
+
+        return 'acl.object_identifier';
     }
 }

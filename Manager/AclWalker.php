@@ -19,13 +19,14 @@ class AclWalker extends SqlWalker
 
         $aclJoin = $this->getQuery()->getHint('acl_join');
         $oidReference = $this->getQuery()->getHint('acl_filter_oid_reference');
+        $objectIdentifierComparison = $this->getQuery()->getHint('acl_object_identifier_comparison');
         $orX = $this->getQuery()->getHint('acl_filter_or_x');
 
         $joinType = empty($orX) ? 'INNER' : 'LEFT';
         $newOidReference = $this->DQLToSQLReference($oidReference);
 
         $sql .= <<<SQL
-{$joinType} JOIN ($aclJoin) acl ON {$newOidReference} = acl.object_identifier
+{$joinType} JOIN ($aclJoin) acl ON CAST({$newOidReference} AS CHAR(100)) = {$objectIdentifierComparison}
 SQL;
 
         return $sql;
