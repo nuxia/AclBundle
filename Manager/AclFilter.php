@@ -274,7 +274,7 @@ SQL;
     private function getAclObjectIdentifierComparison(Connection $connection)
     {
         if ('pdo_mysql' === $connection->getDriver()->getName()) {
-            return 'CONVERT(acl.object_identifier USING utf8)';
+            return 'acl.object_identifier COLLATE utf8_unicode_ci';
         }
 
         return 'acl.object_identifier';
