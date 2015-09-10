@@ -178,7 +178,7 @@ class AclFilter implements AclFilterInterface
      */
     private function getAclWhereClause(Connection $connection, $permission)
     {
-        $sql = 'acl.granting = 1 AND (';
+        $sql = 'acl.granting = '.$connection->getDriver()->getDatabasePlatform()->convertBooleans(true).' AND (';
 
         $requiredMasks = $this->permissionMap->getMasks($permission, null);
 
