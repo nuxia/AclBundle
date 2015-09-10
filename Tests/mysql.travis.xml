@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="bootstrap.php" colors="true">
+    <php>
+        <server name="KERNEL_DIR" value="Tests/App" />
+        <var name="db_type" value="pdo_mysql"/>
+        <var name="db_host" value="localhost" />
+        <var name="db_username" value="travis" />
+        <var name="db_password" value="" />
+        <var name="db_name" value="test_acl" />
+        <var name="db_port" value="3306"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="AclBundle test suite">
+            <directory suffix="Test.php">.</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>../</directory>
+            <exclude>
+                <directory>../Resources</directory>
+                <directory>../Tests</directory>
+                <directory>../vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
