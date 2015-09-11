@@ -87,8 +87,16 @@ class AclIdentifierTest extends AbstractSecurityTest
 
         $this->aclIdentifier->updateUserSecurityIdentity('alice', $alice);
         $this->assertEquals(1, (int) $this->connection->fetchColumn(
-            'SELECT COUNT(id) FROM acl_security_identities WHERE username = 1 AND identifier = :identifier',
-            ['identifier' => 'Symfony\Component\Security\Core\User\User-alice2']
+            'SELECT COUNT(id) FROM acl_security_identities WHERE username = :username AND identifier = :identifier',
+            [
+                'username' => true,
+                'identifier' => 'Symfony\Component\Security\Core\User\User-alice2',
+            ],
+            0,
+            [
+                'username' => \PDO::PARAM_BOOL,
+                'identifier' => \PDO::PARAM_STR,
+            ]
         ));
     }
 
@@ -98,8 +106,16 @@ class AclIdentifierTest extends AbstractSecurityTest
 
         $this->aclIdentifier->updateRoleSecurityIdentity('ROLE_EDITOR', 'ROLE_EDITOR2');
         $this->assertEquals(1, (int) $this->connection->fetchColumn(
-            'SELECT COUNT(id) FROM acl_security_identities WHERE username = 0 AND identifier = :identifier',
-            ['identifier' => 'ROLE_EDITOR2']
+            'SELECT COUNT(id) FROM acl_security_identities WHERE username = :username AND identifier = :identifier',
+            [
+                'username' => false,
+                'identifier' => 'ROLE_EDITOR2',
+            ],
+            0,
+            [
+                'username' => \PDO::PARAM_BOOL,
+                'identifier' => \PDO::PARAM_STR,
+            ]
         ));
     }
 
