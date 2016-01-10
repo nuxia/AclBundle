@@ -9,10 +9,11 @@ use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Symfony\Component\Security\Acl\Util\ClassUtils;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Util\ClassUtils;
+use Symfony\Component\Security\Core\Util\ClassUtils as DeprecatedClassUtils;
 
 class AclIdentifier implements AclIdentifierInterface
 {
@@ -70,7 +71,11 @@ class AclIdentifier implements AclIdentifierInterface
         switch ($type) {
             case self::OID_TYPE_CLASS:
                 if (is_object($classOrObject)) {
-                    $classOrObject = ClassUtils::getRealClass($classOrObject);
+                    if (class_exists('Symfony\Component\Security\Acl\Util\ClassUtils')) {
+                        $classOrObject = ClassUtils::getRealClass($classOrObject);
+                    } else {
+                        $classOrObject = DeprecatedClassUtils::getRealClass($classOrObject);
+                    }
                 }
 
                 return new ObjectIdentity($type, $classOrObject);
