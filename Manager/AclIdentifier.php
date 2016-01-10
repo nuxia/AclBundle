@@ -109,10 +109,33 @@ class AclIdentifier implements AclIdentifierInterface
      */
     public function updateUserSecurityIdentity($oldUsername, UserInterface $user = null)
     {
-        $this->aclProvider->updateUserSecurityIdentity(
-            $this->getUserSecurityIdentity($user),
-            $oldUsername
-        );
+        // $this->aclProvider->updateUserSecurityIdentity() is only available in symfony/security-acl >= 2.5
+        if (method_exists($this->aclProvider, 'updateUserSecurityIdentity')) {
+            $this->aclProvider->updateUserSecurityIdentity(
+                $this->getUserSecurityIdentity($user),
+                $oldUsername
+            );
+        } else {
+            // only for symfony/security-acl < 2.5
+            $usid = $this->getUserSecurityIdentity($user);
+
+            if ($usid->getUsername() == $oldUsername) {
+                throw new \InvalidArgumentException('There are no changes.');
+            }
+
+            $oldIdentifier = $usid->getClass().'-'.$oldUsername;
+            $newIdentifier = $usid->getClass().'-'.$usid->getUsername();
+
+            $query = sprintf(
+                'UPDATE %s SET identifier = %s WHERE identifier = %s AND username = %s',
+                $this->aclTables['sid'],
+                $this->connection->quote($newIdentifier),
+                $this->connection->quote($oldIdentifier),
+                $this->connection->getDatabasePlatform()->convertBooleans(true)
+            );
+
+            $this->connection->executeQuery($query);
+        }
     }
 
     /**
