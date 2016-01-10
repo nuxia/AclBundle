@@ -33,13 +33,14 @@ class NuxiaAclExtension extends Extension
         }
 
         // Set the SecurityContext for Symfony <2.6
-        if (Kernel::VERSION_ID >= 20600) {
+        if ($container->has('security.token_storage') && $container->has('security.authorization_checker')) {
             $tokenStorageReference = new Reference('security.token_storage');
             $authorizationCheckerReference = new Reference('security.authorization_checker');
         } else {
             $tokenStorageReference = new Reference('security.context');
             $authorizationCheckerReference = new Reference('security.context');
         }
+
         $container
             ->getDefinition('nuxia_acl.acl_identifier')
             ->replaceArgument(0, $tokenStorageReference);
