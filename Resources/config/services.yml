@@ -11,38 +11,38 @@ services:
         class: Nuxia\AclBundle\Manager\AclIdentifier
         arguments:
             -
-            - @security.acl.provider
-            - @security.acl.dbal.connection
+            - "@security.acl.provider"
+            - "@security.acl.dbal.connection"
             - %acl_tables%
 
     nuxia_acl.acl_manager:
         class: Nuxia\AclBundle\Manager\AclManager
         arguments:
-            - @nuxia_acl.acl_identifier
-            - @security.acl.provider
+            - "@nuxia_acl.acl_identifier"
+            - "@security.acl.provider"
         calls:
-            - [ setPermissionMap, [ @nuxia_acl.permission_map ] ]
+            - [ setPermissionMap, [ "@nuxia_acl.permission_map" ] ]
 
     nuxia_acl.acl_checker:
         class: Nuxia\AclBundle\Manager\AclChecker
         arguments:
-            - @nuxia_acl.acl_identifier
+            - "@nuxia_acl.acl_identifier"
             -
-            - @security.access.decision_manager
+            - "@security.access.decision_manager"
 
     nuxia_acl.acl_filter:
         class: Nuxia\AclBundle\Manager\AclFilter
         arguments:
-            - @nuxia_acl.acl_identifier
-            - @security.role_hierarchy
+            - "@nuxia_acl.acl_identifier"
+            - "@security.role_hierarchy"
             -
             - %acl_tables%
         calls:
-            - [ setPermissionMap, [ @nuxia_acl.permission_map ] ]
+            - [ setPermissionMap, [ "@nuxia_acl.permission_map" ] ]
 
     nuxia_acl.twig.acl_extension:
         class: Nuxia\AclBundle\Twig\AclExtension
         arguments:
-            - @nuxia_acl.acl_checker
+            - "@nuxia_acl.acl_checker"
         tags:
             - { name: twig.extension }
