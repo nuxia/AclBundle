@@ -5,10 +5,15 @@ parameters:
         oid: %security.acl.dbal.oid_table_name%
         oid_ancestor: %security.acl.dbal.oid_ancestors_table_name%
         sid: %security.acl.dbal.sid_table_name%
+    nuxia.manager.acl_identifier_class: "Nuxia\\AclBundle\\Manager\\AclIdentifier"
+    nuxia.manager.acl_manager_class: "Nuxia\\AclBundle\\Manager\\AclManager"
+    nuxia.manager.acl_checker_class: "Nuxia\\AclBundle\\Manager\\AclChecker"
+    nuxia.manager.acl_filter_class: "Nuxia\\AclBundle\\Manager\\AclFilter"
+    nuxia.twig.acl_extension_class: "Nuxia\\AclBundle\\Twig\\AclExtension"
 
 services:
     nuxia_acl.acl_identifier:
-        class: Nuxia\AclBundle\Manager\AclIdentifier
+        class: %nuxia.manager.acl_identifier_class%
         arguments:
             -
             - "@security.acl.provider"
@@ -16,7 +21,7 @@ services:
             - %acl_tables%
 
     nuxia_acl.acl_manager:
-        class: Nuxia\AclBundle\Manager\AclManager
+        class: %nuxia.manager.acl_manager_class%
         arguments:
             - "@nuxia_acl.acl_identifier"
             - "@security.acl.provider"
@@ -24,14 +29,14 @@ services:
             - [ setPermissionMap, [ "@nuxia_acl.permission_map" ] ]
 
     nuxia_acl.acl_checker:
-        class: Nuxia\AclBundle\Manager\AclChecker
+        class: %nuxia.manager.acl_checker_class%
         arguments:
             - "@nuxia_acl.acl_identifier"
             -
             - "@security.access.decision_manager"
 
     nuxia_acl.acl_filter:
-        class: Nuxia\AclBundle\Manager\AclFilter
+        class: %nuxia.manager.acl_filter_class%
         arguments:
             - "@nuxia_acl.acl_identifier"
             - "@security.role_hierarchy"
@@ -41,7 +46,7 @@ services:
             - [ setPermissionMap, [ "@nuxia_acl.permission_map" ] ]
 
     nuxia_acl.twig.acl_extension:
-        class: Nuxia\AclBundle\Twig\AclExtension
+        class: %nuxia.twig.acl_extension_class%
         arguments:
             - "@nuxia_acl.acl_checker"
         tags:
