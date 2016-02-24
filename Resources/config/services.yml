@@ -5,11 +5,11 @@ parameters:
         oid: %security.acl.dbal.oid_table_name%
         oid_ancestor: %security.acl.dbal.oid_ancestors_table_name%
         sid: %security.acl.dbal.sid_table_name%
-    nuxia.manager.acl_identifier_class: "Nuxia\\AclBundle\\Manager\\AclIdentifier"
-    nuxia.manager.acl_manager_class: "Nuxia\\AclBundle\\Manager\\AclManager"
-    nuxia.manager.acl_checker_class: "Nuxia\\AclBundle\\Manager\\AclChecker"
-    nuxia.manager.acl_filter_class: "Nuxia\\AclBundle\\Manager\\AclFilter"
-    nuxia.twig.acl_extension_class: "Nuxia\\AclBundle\\Twig\\AclExtension"
+    nuxia.manager.acl_identifier_class: Nuxia\AclBundle\Manager\AclIdentifier
+    nuxia.manager.acl_manager_class: Nuxia\AclBundle\Manager\AclManager
+    nuxia.manager.acl_checker_class: Nuxia\AclBundle\Manager\AclChecker
+    nuxia.manager.acl_filter_class: Nuxia\AclBundle\Manager\AclFilter
+    nuxia.twig.acl_extension_class: Nuxia\AclBundle\Twig\AclExtension
 
 services:
     nuxia_acl.acl_identifier:
