@@ -1,10 +1,10 @@
 parameters:
     acl_tables:
-        class: %security.acl.dbal.class_table_name%
-        entry: %security.acl.dbal.entry_table_name%
-        oid: %security.acl.dbal.oid_table_name%
-        oid_ancestor: %security.acl.dbal.oid_ancestors_table_name%
-        sid: %security.acl.dbal.sid_table_name%
+        class: "%security.acl.dbal.class_table_name%"
+        entry: "%security.acl.dbal.entry_table_name%"
+        oid: "%security.acl.dbal.oid_table_name%"
+        oid_ancestor: "%security.acl.dbal.oid_ancestors_table_name%"
+        sid: "%security.acl.dbal.sid_table_name%"
     nuxia.manager.acl_identifier_class: Nuxia\AclBundle\Manager\AclIdentifier
     nuxia.manager.acl_manager_class: Nuxia\AclBundle\Manager\AclManager
     nuxia.manager.acl_checker_class: Nuxia\AclBundle\Manager\AclChecker
@@ -13,15 +13,15 @@ parameters:
 
 services:
     nuxia_acl.acl_identifier:
-        class: %nuxia.manager.acl_identifier_class%
+        class: "%nuxia.manager.acl_identifier_class%"
         arguments:
             -
             - "@security.acl.provider"
             - "@security.acl.dbal.connection"
-            - %acl_tables%
+            - "%acl_tables%"
 
     nuxia_acl.acl_manager:
-        class: %nuxia.manager.acl_manager_class%
+        class: "%nuxia.manager.acl_manager_class%"
         arguments:
             - "@nuxia_acl.acl_identifier"
             - "@security.acl.provider"
@@ -29,25 +29,25 @@ services:
             - [ setPermissionMap, [ "@nuxia_acl.permission_map" ] ]
 
     nuxia_acl.acl_checker:
-        class: %nuxia.manager.acl_checker_class%
+        class: "%nuxia.manager.acl_checker_class%"
         arguments:
             - "@nuxia_acl.acl_identifier"
             -
             - "@security.access.decision_manager"
 
     nuxia_acl.acl_filter:
-        class: %nuxia.manager.acl_filter_class%
+        class: "%nuxia.manager.acl_filter_class%"
         arguments:
             - "@nuxia_acl.acl_identifier"
             - "@security.role_hierarchy"
             -
-            - %acl_tables%
+            - "%acl_tables%"
         calls:
-            - [ setPermissionMap, [ "@nuxia_acl.permission_map" ] ]
+            - [ "setPermissionMap", [ "@nuxia_acl.permission_map" ] ]
 
     nuxia_acl.twig.acl_extension:
-        class: %nuxia.twig.acl_extension_class%
+        class: "%nuxia.twig.acl_extension_class%"
         arguments:
             - "@nuxia_acl.acl_checker"
         tags:
-            - { name: twig.extension }
+            - { name: "twig.extension" }
